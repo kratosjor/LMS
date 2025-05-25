@@ -40,7 +40,7 @@ def agregar_alumno(request):
             form.save()
             return redirect('listar_alumnos')
     else:
-        form = ProfesorForm()
+        form = AlumnoForm()
         
     return render(request, 'plataforma/agregar_alumno.html', {'form': form})
 
@@ -58,3 +58,29 @@ def agregar_curso(request):
     else:
         form = CursoForm()
     return render(request, 'plataforma/agregar_curso.html', {'form': form})
+
+
+########################
+#-----VIEW LISTAR PROFESORES
+########################
+
+def listar_profesores(request):
+    profesores = Profesor.objects.all()
+    return render(request, 'plataforma/listar_profesores.html', {'profesores': profesores})
+
+
+########################
+#-----VIEW LISTAR PROFESORES
+########################
+
+def listar_alumnos(request):
+    alumnos = Alumno.objects.all()
+    return render(request, 'plataforma/listar_alumnos.html', {'alumnos': alumnos})
+
+########################
+#-----VIEW LISTAR CURSOS
+########################
+def listar_cursos(request):
+    cursos = Curso.objects.all()
+    return render(request, 'plataforma/listar_cursos.html', {'cursos': cursos})
+    

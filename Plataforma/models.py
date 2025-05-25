@@ -25,6 +25,7 @@ class Alumno(models.Model):
     telefono = models.CharField(max_length=15)
     fecha_nacimiento = models.DateField()
     fecha_inscripcion = models.DateField()
+    cursos = models.ManyToManyField('Curso', related_name='alumnos', blank=True)
 
     def __str__(self):
         return f"Alumno {self.nombre} {self.apellidos}"
@@ -42,11 +43,14 @@ class Curso(models.Model):
 
     nombre_curso = models.CharField(max_length=100)
     profesor_curso = models.ForeignKey(Profesor, on_delete=models.CASCADE, related_name='cursos')
-    alumnos_curso = models.ManyToManyField(Alumno, related_name='cursos')
+    max_alumnos = models.PositiveIntegerField(default=40)  # límite
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     modalidad = models.CharField(max_length=100, choices=MODALIDAD_CHOICES)
     descripcion = models.TextField()
+    
+    def alumnos_count(self):
+        return self.alumnos.count()
 
     def __str__(self):
         return f"{self.nombre_curso} ({self.modalidad})"

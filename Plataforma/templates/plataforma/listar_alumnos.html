@@ -1,0 +1,55 @@
+{% extends 'template_base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Lista de Alumnos</title>
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">👩‍🎓 Lista de Alumnos</h5>
+            <a href="{% url 'agregar_alumno' %}" class="btn btn-sm btn-light">+ Agregar Alumno</a>
+        </div>
+        <div class="card-body p-0">
+            {% if alumnos %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Fecha de Nacimiento</th>
+                            <th>Inscritos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alumno in alumnos %}
+                        <tr>
+                            <td>{{ alumno.nombre }}</td>
+                            <td>{{ alumno.apellidos }}</td>
+                            <td>{{ alumno.email }}</td>
+                            <td>{{ alumno.telefono }}</td>
+                            <td>{{ alumno.fecha_nacimiento }}</td>
+                            <td>
+                                {% for curso in alumno.cursos.all %}
+                                    <span class="badge bg-secondary">{{ curso.nombre_curso }}</span>
+                                {% empty %}
+                                    <span class="text-muted">Sin cursos</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="p-3 text-muted">No hay alumnos registrados aún.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
