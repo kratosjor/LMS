@@ -1,0 +1,34 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}<title>Plataforma LMS</title>{% endblock title %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="lms-body">
+
+    <div class="lms-sidebar">
+        <nav class="lms-nav">
+            <a class="lms-nav-link" href="{% url 'agregar_profesor' %}">➕ Agregar Profesor</a>
+            <a class="lms-nav-link" href="{% url 'agregar_alumno' %}">➕ Agregar Alumno</a>
+            <a class="lms-nav-link" href="{% url 'agregar_curso' %}">➕ Agregar Curso</a>
+            <hr class="lms-divider">
+            <a class="lms-nav-link" href="{% url 'listar_profesores' %}">📋 Listar Profesores</a>
+            <a class="lms-nav-link" href="{% url 'listar_alumnos' %}">📋 Listar Alumnos</a>
+            <a class="lms-nav-link" href="{% url 'listar_cursos' %}">📋 Listar Cursos</a>
+        </nav>
+    </div>
+
+    <main class="lms-main-content">
+        {% block content %}
+        {% endblock content %}
+        <footer class="lms-footer">
+            <p>Plataforma LMS - Jordan Espinoza</p>
+        </footer>
+    </main>
+
+</body>
+</html>

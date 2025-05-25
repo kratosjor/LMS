@@ -1,0 +1,50 @@
+.lms-body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+}
+
+.lms-sidebar {
+    width: 240px;
+    background-color: #2c3e50;
+    height: 100vh;
+    position: fixed;
+    padding-top: 20px;
+}
+
+.lms-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.lms-nav-link {
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.lms-nav-link:hover {
+    background-color: #34495e;
+}
+
+.lms-divider {
+    border: none;
+    border-top: 1px solid #444;
+    margin: 10px 0;
+}
+
+.lms-main-content {
+    margin-left: 240px;
+    padding: 20px;
+    width: 100%;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+}
+
+.lms-footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #777;
+    font-size: 14px;
+}
