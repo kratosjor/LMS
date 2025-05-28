@@ -44,4 +44,12 @@ class CursoForm(forms.ModelForm):
             'fecha_fin': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
         
-        
+
+########################
+#-----FORM MATERIAL
+########################
+
+class MaterialForm(forms.ModelForm):
+    class Meta:
+        model = Material
+        fields = ['curso', 'titulo', 'contenido_html']

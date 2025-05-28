@@ -19,7 +19,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>Nombre</th>
-                            <th>Descripción</th>
+                            <th>Ir</th>
                             <th>Incio</th>
                             <th>Finalizacion</th>
                             <th>Profesor</th>
@@ -29,7 +29,9 @@
                         {% for curso in cursos %}
                         <tr>
                             <td>{{ curso.nombre_curso }}</td>
-                            <td>{{ curso.descripcion }}</td>
+                            <td>
+                                <a href="{% url 'detalle_curso' curso.id %}" class="btn btn-sm btn-primary">Ver Detalle</a>
+                            </td>
                             <td>{{ curso.fecha_inicio }}</td>
                             <td>{{ curso.fecha_fin }}</td>
                             <td>{{ curso.profesor_curso }}</td>

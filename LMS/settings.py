@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Plataforma',  # Your app name
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,12 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+###ckeditor settings
+
+# Configuración para subir archivos desde CKEditor
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+# Asegúrate de tener también configurado esto:
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

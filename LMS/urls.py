@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('plataforma/', include('Plataforma.urls')),  # o el nombre de tu app
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 

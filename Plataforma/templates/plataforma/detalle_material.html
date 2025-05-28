@@ -1,0 +1,35 @@
+{% extends 'template_base.html' %}
+{% load static %}
+
+{% block title %}
+<title>{{ material.titulo }}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">📄 {{ material.titulo }}</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted"><strong>Curso:</strong> {{ material.curso.nombre_curso }}</p>
+            <hr>
+
+            <!-- Contenido enriquecido -->
+            <div class="presentacion-contenido">
+                {{ material.contenido_html|safe }}
+            </div>
+        </div>
+    </div>
+    <div class="text-end mt-3">
+        <a href="{% url 'editar_material' material.id %}" class="btn btn-outline-primary btn-sm">
+            ✏️ Editar Material
+        </a>
+    </div>
+    <div class="mt-3">
+        <a href="{% url 'ver_materiales' material.curso.id %}" class="btn btn-secondary">
+            ← Volver al listado de materiales
+        </a>
+    </div>
+</div>
+{% endblock content %}

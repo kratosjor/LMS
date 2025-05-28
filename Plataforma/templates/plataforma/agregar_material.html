@@ -1,0 +1,17 @@
+<!-- agregar_material.html -->
+
+{% extends 'template_base.html' %}
+{% load static %}
+
+{% block title %}<title>Agregar Contenido HTML</title>{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>📘 Agregar Contenido HTML al Curso</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Guardar</button>
+    </form>
+</div>
+{% endblock %}

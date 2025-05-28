@@ -1,0 +1,15 @@
+{% extends 'template_base.html' %}
+{% load static %}
+
+{% block title %}<title>Editar Contenido HTML</title>{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>📘 Editar Contenido HTML al Curso</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Guardar</button>
+    </form>
+</div>
+{% endblock %}

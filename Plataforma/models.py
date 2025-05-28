@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField  # Asegúrate de instalar django-ckeditor
 
 ########################
 #-----MODELO PROFESOR
@@ -54,3 +55,17 @@ class Curso(models.Model):
 
     def __str__(self):
         return f"{self.nombre_curso} ({self.modalidad})"
+    
+########################
+#-----MODELO MATERIAL
+########################
+
+class Material(models.Model):
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='materiales')
+    titulo = models.CharField(max_length=200)
+    contenido_html = RichTextField()  # Usando RichTextField para contenido enriquecido
+    creado_en = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.titulo
+    
