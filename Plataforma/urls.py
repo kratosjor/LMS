@@ -21,5 +21,7 @@ urlpatterns = [
     path('material/<int:material_id>/', detalle_material, name='detalle_material'),
     path('material/<int:pk>/editar/', MaterialUpdateView.as_view(), name='editar_material'),
 
-
+    #EDICION
+    path('editar_curso/<int:pk>/', CursoUpdateView.as_view(), name='editar_curso'),
+    path('editar_alumno/<int:pk>/', AlumnoUpdateView.as_view(), name='editar_alumno'),
 ]

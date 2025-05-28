@@ -146,5 +146,28 @@ class MaterialUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('ver_materiales', kwargs={'curso_id': self.object.curso.id})
     
+
+##########################
+#-----VIEW EDITAR CURSO
+##########################  
+
+class CursoUpdateView(UpdateView):
+    model = Curso
+    template_name = 'plataforma/editar_curso.html'
+    fields = ['nombre_curso', 'profesor_curso', 'fecha_inicio', 'fecha_fin', 'modalidad', 'descripcion']
     
+    def get_success_url(self):
+        return reverse_lazy('detalle_curso', kwargs={'curso_id': self.object.id})
+
+
+##########################
+#-----VIEW EDITAR ALUMNO
+##########################  
+
+class AlumnoUpdateView(UpdateView):
+    model = Alumno
+    template_name = 'plataforma/editar_alumno.html'
+    fields = ['nombre', 'apellidos', 'email', 'telefono', 'fecha_nacimiento', 'fecha_inscripcion','cursos']
     
+    def get_success_url(self):
+        return reverse_lazy('listar_alumnos')

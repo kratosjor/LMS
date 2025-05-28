@@ -22,8 +22,9 @@
                             <th>Apellidos</th>
                             <th>Email</th>
                             <th>Teléfono</th>
-                            <th>Fecha de Nacimiento</th>
+                            
                             <th>Inscritos</th>
+                            <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,13 +34,17 @@
                             <td>{{ alumno.apellidos }}</td>
                             <td>{{ alumno.email }}</td>
                             <td>{{ alumno.telefono }}</td>
-                            <td>{{ alumno.fecha_nacimiento }}</td>
+                            
                             <td>
                                 {% for curso in alumno.cursos.all %}
                                     <span class="badge bg-secondary">{{ curso.nombre_curso }}</span>
                                 {% empty %}
                                     <span class="text-muted">Sin cursos</span>
                                 {% endfor %}
+                            </td>
+                            <td>
+                                <a href="{% url 'editar_alumno' alumno.id %}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pencil-square"></i> Editar
                             </td>
                         </tr>
                         {% endfor %}

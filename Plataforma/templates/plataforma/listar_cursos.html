@@ -20,6 +20,7 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Ir</th>
+                            <th>Editar</th>
                             <th>Incio</th>
                             <th>Finalizacion</th>
                             <th>Profesor</th>
@@ -32,6 +33,10 @@
                             <td>
                                 <a href="{% url 'detalle_curso' curso.id %}" class="btn btn-sm btn-primary">Ver Detalle</a>
                             </td>
+                            <td>
+                                <a href="{% url 'editar_curso' curso.id %}" class="btn btn-sm btn-primary">Editar</a>
+                            </td>
+                            
                             <td>{{ curso.fecha_inicio }}</td>
                             <td>{{ curso.fecha_fin }}</td>
                             <td>{{ curso.profesor_curso }}</td>
