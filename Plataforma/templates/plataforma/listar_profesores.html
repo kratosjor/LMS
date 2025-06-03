@@ -12,6 +12,20 @@
             <h5 class="mb-0">👨‍🏫 Lista de Profesores</h5>
             <a href="{% url 'agregar_profesor' %}" class="btn btn-sm btn-light">+ Agregar Profesor</a>
         </div>
+
+        <!-- Buscador -->
+        <div class="card-body border-bottom">
+            <form method="get" class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="profesor" class="form-control" placeholder="Buscar por nombre..." value="{{ buscar_profesor }}">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabla -->
         <div class="card-body p-0">
             {% if profesores %}
             <div class="table-responsive">
@@ -41,7 +55,7 @@
                 </table>
             </div>
             {% else %}
-                <div class="p-3 text-muted">No hay profesores registrados aún.</div>
+                <div class="p-3 text-muted">No hay profesores registrados{% if buscar_profesor %} que coincidan con "{{ buscar_profesor }}"{% endif %}.</div>
             {% endif %}
         </div>
     </div>

@@ -24,4 +24,14 @@ urlpatterns = [
     #EDICION
     path('editar_curso/<int:pk>/', CursoUpdateView.as_view(), name='editar_curso'),
     path('editar_alumno/<int:pk>/', AlumnoUpdateView.as_view(), name='editar_alumno'),
+    
+    #ACTIVIDAD
+    path('cursos/<int:curso_id>/crear_actividad/', crear_actividad, name='crear_actividad'),
+    path('curso/<int:curso_id>/actividades/', ver_actividad, name='ver_actividad'),
+
+
+    path('actividad/<int:pk>/eliminar_actividad/', ActividadDeleteView.as_view(), name='eliminar_actividad'),
+
+
+
 ]

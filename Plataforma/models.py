@@ -69,3 +69,40 @@ class Material(models.Model):
     def __str__(self):
         return self.titulo
     
+#############################################################################################################
+
+
+########################
+#-----MODELO ACTIVIDAD  
+########################
+class Actividad(models.Model):
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='actividades')
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField(blank=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.titulo
+    
+########################
+#-----MODELO Pregunta
+########################
+
+class Pregunta(models.Model):
+    actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE, related_name='preguntas')
+    texto = models.TextField()
+
+    def __str__(self):
+        return self.texto
+    
+########################
+#-----MODELO OPCION
+########################
+
+class Opcion(models.Model):
+    pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE, related_name='opciones')
+    texto = models.CharField(max_length=255)
+    es_correcta = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.texto

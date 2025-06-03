@@ -1,0 +1,64 @@
+{% extends 'template_base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    
+    <h4>Actividad</h4>
+    {{ actividad_form.as_p }}
+
+    <h4>Preguntas</h4>
+    <div id="preguntas-container">
+        <!-- Aquí se insertarán preguntas dinámicamente -->
+    </div>
+
+    <button type="button" id="agregar-pregunta" class="btn btn-secondary mb-3">Agregar pregunta</button>
+    <button type="submit" class="btn btn-success">Guardar actividad</button>
+</form>
+
+<template id="pregunta-template">
+    <div class="pregunta mb-4 border rounded p-3">
+        <label>Texto de la pregunta:</label>
+        <input type="text" name="preguntas[][texto]" class="form-control mb-2" required>
+
+        <div class="opciones-container">
+            <!-- Opciones aquí -->
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-primary agregar-opcion">Agregar opción</button>
+    </div>
+</template>
+
+<template id="opcion-template">
+    <div class="opcion mb-2">
+        <input type="text" name="opciones[][texto]" class="form-control d-inline-block w-75" placeholder="Texto opción" required>
+        <label class="ms-2">
+            <input type="checkbox" name="opciones[][es_correcta]"> Correcta
+        </label>
+    </div>
+</template>
+
+<script>
+document.getElementById('agregar-pregunta').addEventListener('click', () => {
+    const preguntaTemplate = document.getElementById('pregunta-template').content.cloneNode(true);
+    const opcionesContainer = preguntaTemplate.querySelector('.opciones-container');
+    const agregarOpcionBtn = preguntaTemplate.querySelector('.agregar-opcion');
+
+    // Añadir 3 opciones por defecto
+    for (let i = 0; i < 3; i++) {
+        const opcionTemplate = document.getElementById('opcion-template').content.cloneNode(true);
+        opcionesContainer.appendChild(opcionTemplate);
+    }
+
+    agregarOpcionBtn.addEventListener('click', () => {
+        if (opcionesContainer.children.length < 3) {
+            const nuevaOpcion = document.getElementById('opcion-template').content.cloneNode(true);
+            opcionesContainer.appendChild(nuevaOpcion);
+        } else {
+            alert('Máximo 3 opciones por pregunta');
+        }
+    });
+
+    document.getElementById('preguntas-container').appendChild(preguntaTemplate);
+});
+</script>
+{% endblock %}

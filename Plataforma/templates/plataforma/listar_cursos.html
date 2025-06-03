@@ -12,7 +12,20 @@
             <h5 class="mb-0">📚 Lista de Cursos</h5>
             <a href="{% url 'agregar_curso' %}" class="btn btn-sm btn-light">+ Agregar Curso</a>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body">
+            <!-- Formulario de búsqueda -->
+            <div class="card-body border-bottom">
+            <form method="get" class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="curso" class="form-control" placeholder="Buscar Curso..." value="{{ buscar_curso }}">
+
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </form>
+        </div>
+
             {% if cursos %}
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -21,8 +34,8 @@
                             <th>Nombre</th>
                             <th>Ir</th>
                             <th>Editar</th>
-                            <th>Incio</th>
-                            <th>Finalizacion</th>
+                            <th>Inicio</th>
+                            <th>Finalización</th>
                             <th>Profesor</th>
                         </tr>
                     </thead>
@@ -36,7 +49,6 @@
                             <td>
                                 <a href="{% url 'editar_curso' curso.id %}" class="btn btn-sm btn-primary">Editar</a>
                             </td>
-                            
                             <td>{{ curso.fecha_inicio }}</td>
                             <td>{{ curso.fecha_fin }}</td>
                             <td>{{ curso.profesor_curso }}</td>

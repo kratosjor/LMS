@@ -12,6 +12,20 @@
             <h5 class="mb-0">👩‍🎓 Lista de Alumnos</h5>
             <a href="{% url 'agregar_alumno' %}" class="btn btn-sm btn-light">+ Agregar Alumno</a>
         </div>
+
+        <!-- Formulario de Búsqueda -->
+        <div class="card-body border-bottom">
+            <form method="get" class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="alumno" class="form-control" placeholder="Buscar por nombre o apellidos..." value="{{ buscar_alumno }}">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabla de Alumnos -->
         <div class="card-body p-0">
             {% if alumnos %}
             <div class="table-responsive">
@@ -22,7 +36,6 @@
                             <th>Apellidos</th>
                             <th>Email</th>
                             <th>Teléfono</th>
-                            
                             <th>Inscritos</th>
                             <th>Editar</th>
                         </tr>
@@ -34,7 +47,6 @@
                             <td>{{ alumno.apellidos }}</td>
                             <td>{{ alumno.email }}</td>
                             <td>{{ alumno.telefono }}</td>
-                            
                             <td>
                                 {% for curso in alumno.cursos.all %}
                                     <span class="badge bg-secondary">{{ curso.nombre_curso }}</span>
@@ -45,6 +57,7 @@
                             <td>
                                 <a href="{% url 'editar_alumno' alumno.id %}" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil-square"></i> Editar
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -52,7 +65,9 @@
                 </table>
             </div>
             {% else %}
-                <div class="p-3 text-muted">No hay alumnos registrados aún.</div>
+                <div class="p-3 text-muted">
+                    No hay alumnos registrados{% if buscar_alumno %} que coincidan con "{{ buscar_alumno }}"{% endif %}.
+                </div>
             {% endif %}
         </div>
     </div>

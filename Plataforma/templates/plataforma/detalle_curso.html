@@ -22,17 +22,30 @@
         </div>
     </div>
     <div>
-        <p>
-            <a href="{% url 'agregar_material' curso.id %}" class="btn btn-success">
-                ➕ Agregar Material al curso
-            </a>
-        </p>
-        <p>
-            <a href="{% url 'ver_materiales' curso.id %}" class="btn btn-info">
-                📂 Ver los materiales del curso
-            </a>
-        </p>
+    <p>
+        <a href="{% url 'agregar_material' curso.id %}" class="btn btn-success">
+            ➕ Agregar Material al curso
+        </a>
+    </p>
+    <p>
+        <a href="{% url 'ver_materiales' curso.id %}" class="btn btn-info">
+            📂 Ver los materiales del curso
+        </a>
+    </p>
+    <a href="{% url 'crear_actividad' curso.id %}" class="btn btn-primary">
+        ➕ Agregar Test de Evaluación
+    </a>
+
+    
+    <div class="d-flex align-items-center gap-2">
+        <a href="{% url 'ver_actividad' curso.id %}" class="btn btn-warning">
+    📋 Ver Test de Evaluación
+</a>
+        
     </div>
+    
+</div>
+
 
     <div class="card mt-4 shadow-sm">
         <div class="card-header bg-dark text-white">

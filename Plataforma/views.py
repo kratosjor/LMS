@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import UpdateView, DetailView, ListView, CreateView, DeleteView
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 ########################
 #-----VIEW HOME
@@ -68,24 +69,56 @@ def agregar_curso(request):
 ########################
 
 def listar_profesores(request):
-    profesores = Profesor.objects.all()
-    return render(request, 'plataforma/listar_profesores.html', {'profesores': profesores})
+    buscar_profesor = request.GET.get('profesor', '')
+
+    if buscar_profesor:
+        profesores = Profesor.objects.filter(
+            Q(nombre__icontains=buscar_profesor) |
+            Q(apellidos__icontains=buscar_profesor)
+        )
+    else:
+        profesores = Profesor.objects.all()
+
+    return render(request, 'plataforma/listar_profesores.html', {
+    'profesores': profesores,
+    'buscar_profesor': buscar_profesor
+})
+
 
 
 ########################
-#-----VIEW LISTAR PROFESORES
+#-----VIEW LISTAR alumnos
 ########################
 
 def listar_alumnos(request):
-    alumnos = Alumno.objects.all()
-    return render(request, 'plataforma/listar_alumnos.html', {'alumnos': alumnos})
+    buscar_alumno = request.GET.get("alumno", "")
+    if buscar_alumno:
+        alumnos = Alumno.objects.filter(
+            Q(nombre__icontains=buscar_alumno) |
+            Q(apellidos__icontains=buscar_alumno) 
+        )
+    
+    else:
+        alumnos = Alumno.objects.all()
+    
+    
+    return render(request, 'plataforma/listar_alumnos.html', {'alumnos': alumnos,'buscar_alumno':buscar_alumno})
 
 ########################
 #-----VIEW LISTAR CURSOS
 ########################
 def listar_cursos(request):
-    cursos = Curso.objects.all()
-    return render(request, 'plataforma/listar_cursos.html', {'cursos': cursos})
+    buscar_curso = request.GET.get("curso", "")
+    
+    if buscar_curso:
+        cursos = Curso.objects.filter(nombre_curso__icontains=buscar_curso)
+    else:
+        cursos = Curso.objects.all()
+    
+    return render(request, 'plataforma/listar_cursos.html', {
+        'cursos': cursos,
+        'buscar_curso': buscar_curso
+    })
 
 
 ########################
@@ -171,3 +204,61 @@ class AlumnoUpdateView(UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('listar_alumnos')
+    
+########################
+#-----VISTA CREAR ACTIVIDAD
+########################
+def crear_actividad(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+
+    if request.method == 'POST':
+        actividad_form = ActividadForm(request.POST)
+
+        if actividad_form.is_valid():
+            actividad = actividad_form.save(commit=False)
+            actividad.curso = curso
+            actividad.save()
+
+            # Procesar preguntas y opciones desde request.POST
+            preguntas = request.POST.getlist('preguntas[][texto]')
+            opciones_texto = request.POST.getlist('opciones[][texto]')
+            opciones_correctas = request.POST.getlist('opciones[][es_correcta]')  # Esto es tricky, mejor manejarlo con JS bien nombrado
+
+            # Mejor usar nombres de campo con índices como:
+            # preguntas[0][texto], opciones[0][0][texto], opciones[0][0][es_correcta]
+
+            # Pero esto requiere un parser más avanzado en el backend, o usar JS para reestructurar antes del envío.
+
+            return redirect('detalle_curso', curso.id)
+
+    else:
+        actividad_form = ActividadForm()
+
+    return render(request, 'plataforma/crear_actividad.html', {
+        'actividad_form': actividad_form,
+        'curso': curso,
+    })
+
+    
+    
+########################
+#-----VISTA COMPLETAR ACTIVIDAD
+########################
+def ver_actividad(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+    actividades = Actividad.objects.filter(curso=curso)
+
+    return render(request, 'plataforma/ver_actividad.html', {
+        'curso': curso,
+        'actividades': actividades,
+    })
+########################
+#-----VISTA ELIMINAR ACTIVIDAD
+########################
+
+class ActividadDeleteView(DeleteView):
+    model = Actividad
+    template_name = 'plataforma/actividad_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('detalle_curso', kwargs={'curso_id': self.object.curso.id})

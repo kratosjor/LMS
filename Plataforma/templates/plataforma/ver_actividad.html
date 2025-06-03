@@ -1,0 +1,23 @@
+{% extends 'template_base.html' %}
+
+{% block content %}
+<h2>Actividades del curso: {{ curso.nombre }}</h2>
+
+{% if actividades %}
+    <ul class="list-group">
+        {% for actividad in actividades %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ actividad.titulo }}
+                <div>
+                    <a href="#" class="btn btn-sm btn-info">👁 Ver</a>
+                    <a href="{% url 'eliminar_actividad' actividad.id %}" class="btn btn-sm btn-danger">🗑 Eliminar</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay actividades creadas aún.</p>
+{% endif %}
+
+<a href="{% url 'crear_actividad' curso.id %}" class="btn btn-primary mt-3">➕ Crear nueva actividad</a>
+{% endblock %}

@@ -1,5 +1,6 @@
 from .models import *
 from django import forms
+from django.forms import inlineformset_factory
 
 
 ########################
@@ -53,3 +54,35 @@ class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
         fields = ['curso', 'titulo', 'contenido_html']
+        
+
+####################################################################################################
+
+########################
+#-----FORM  ACTIVIDAD
+########################
+       
+class ActividadForm(forms.ModelForm):
+    class Meta:
+        model = Actividad
+        fields = ['titulo', 'descripcion']
+
+class PreguntaForm(forms.ModelForm):
+    class Meta:
+        model = Pregunta
+        fields = ['texto']
+
+class OpcionForm(forms.ModelForm):
+    class Meta:
+        model = Opcion
+        fields = ['texto', 'es_correcta']
+
+# Formset para preguntas de la actividad
+PreguntaFormSet = inlineformset_factory(
+    Actividad, Pregunta, form=PreguntaForm, extra=1, can_delete=True
+)
+
+# Formset para opciones de cada pregunta
+OpcionFormSet = inlineformset_factory(
+    Pregunta, Opcion, form=OpcionForm, extra=3, can_delete=True, max_num=3, validate_max=True
+)
