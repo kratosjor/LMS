@@ -1,0 +1,8 @@
+{% extends 'template_base.html' %}
+
+{% block content %}
+<h2>Resultado de la actividad: {{ actividad.titulo }}</h2>
+<p>Puntaje obtenido: <strong>{{ puntaje }} / {{ total }}</strong></p>
+
+<a href="{% url 'ver_actividad' actividad.curso.id %}" class="btn btn-secondary">⬅ Volver a actividades</a>
+{% endblock %}

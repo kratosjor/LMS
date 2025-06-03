@@ -28,6 +28,8 @@ urlpatterns = [
     #ACTIVIDAD
     path('cursos/<int:curso_id>/crear_actividad/', crear_actividad, name='crear_actividad'),
     path('curso/<int:curso_id>/actividades/', ver_actividad, name='ver_actividad'),
+    path('actividad/<int:actividad_id>/realizar/', realizar_actividad, name='realizar_actividad'),
+    path('actividad/<int:actividad_id>/resultado/', resultado_actividad, name='resultado_actividad'),
 
 
     path('actividad/<int:pk>/eliminar_actividad/', ActividadDeleteView.as_view(), name='eliminar_actividad'),

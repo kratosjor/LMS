@@ -8,6 +8,11 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import UpdateView, DetailView, ListView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Q
+import json
+from django.http import QueryDict
+from django.forms.models import model_to_dict
+from django.views.decorators.csrf import csrf_exempt
+
 
 ########################
 #-----VIEW HOME
@@ -208,29 +213,34 @@ class AlumnoUpdateView(UpdateView):
 ########################
 #-----VISTA CREAR ACTIVIDAD
 ########################
+@csrf_exempt
 def crear_actividad(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
 
     if request.method == 'POST':
         actividad_form = ActividadForm(request.POST)
-
         if actividad_form.is_valid():
             actividad = actividad_form.save(commit=False)
             actividad.curso = curso
             actividad.save()
 
-            # Procesar preguntas y opciones desde request.POST
-            preguntas = request.POST.getlist('preguntas[][texto]')
-            opciones_texto = request.POST.getlist('opciones[][texto]')
-            opciones_correctas = request.POST.getlist('opciones[][es_correcta]')  # Esto es tricky, mejor manejarlo con JS bien nombrado
+            # Ahora vamos a leer las preguntas y opciones desde los datos POST
+            preguntas_data = json.loads(request.POST.get('preguntas_json', '[]'))
 
-            # Mejor usar nombres de campo con índices como:
-            # preguntas[0][texto], opciones[0][0][texto], opciones[0][0][es_correcta]
+            for pregunta_data in preguntas_data:
+                pregunta = Pregunta.objects.create(
+                    actividad=actividad,
+                    texto=pregunta_data['texto']
+                )
 
-            # Pero esto requiere un parser más avanzado en el backend, o usar JS para reestructurar antes del envío.
+                for opcion_data in pregunta_data['opciones']:
+                    Opcion.objects.create(
+                        pregunta=pregunta,
+                        texto=opcion_data['texto'],
+                        es_correcta=opcion_data['es_correcta']
+                    )
 
             return redirect('detalle_curso', curso.id)
-
     else:
         actividad_form = ActividadForm()
 
@@ -238,11 +248,9 @@ def crear_actividad(request, curso_id):
         'actividad_form': actividad_form,
         'curso': curso,
     })
-
-    
     
 ########################
-#-----VISTA COMPLETAR ACTIVIDAD
+#-----VISTA ver ACTIVIDADes
 ########################
 def ver_actividad(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
@@ -258,7 +266,58 @@ def ver_actividad(request, curso_id):
 
 class ActividadDeleteView(DeleteView):
     model = Actividad
-    template_name = 'plataforma/actividad_confirm_delete.html'
+    template_name = 'plataforma/eliminar_actividad.html'
 
     def get_success_url(self):
         return reverse_lazy('detalle_curso', kwargs={'curso_id': self.object.curso.id})
+    
+########################
+#-----VISTA COMPLETAR ACTIVIDAD
+########################
+def realizar_actividad(request, actividad_id):
+    actividad = get_object_or_404(Actividad, id=actividad_id)
+    preguntas = Pregunta.objects.filter(actividad=actividad).prefetch_related('opciones')
+
+    if request.method == 'POST':
+        puntaje = 0
+        total = preguntas.count()
+        respuestas = {}
+
+        for pregunta in preguntas:
+            seleccion = request.POST.get(f'pregunta_{pregunta.id}')
+            respuestas[pregunta.id] = seleccion
+            if seleccion:
+                opcion = Opcion.objects.filter(id=seleccion, pregunta=pregunta).first()
+                if opcion and opcion.es_correcta:
+                    puntaje += 1
+
+        return render(request, 'plataforma/resultado_actividad.html', {
+            'actividad': actividad,
+            'puntaje': puntaje,
+            'total': total,
+        })
+
+    return render(request, 'plataforma/realizar_actividad.html', {
+        'actividad': actividad,
+        'preguntas': preguntas,
+    })
+
+########################
+#-----VISTA RESULTADO ACTIVIDAD
+########################      
+
+def resultado_actividad(request, actividad_id):
+    actividad = get_object_or_404(Actividad, id=actividad_id)
+    
+    # Ejemplo ficticio: aquí deberías obtener el resultado desde la sesión o la base de datos.
+    puntaje = request.session.get('puntaje', None)
+    total = request.session.get('total', None)
+
+    if puntaje is None or total is None:
+        return redirect('realizar_actividad', actividad_id=actividad.id)
+
+    return render(request, 'plataforma/resultado_actividad.html', {
+        'actividad': actividad,
+        'puntaje': puntaje,
+        'total': total,
+    })

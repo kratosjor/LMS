@@ -12,6 +12,9 @@
         <!-- Aquí se insertarán preguntas dinámicamente -->
     </div>
 
+    <!-- Campo oculto para pasar las preguntas como JSON -->
+    <input type="hidden" name="preguntas_json" id="preguntas_json">
+
     <button type="button" id="agregar-pregunta" class="btn btn-secondary mb-3">Agregar pregunta</button>
     <button type="submit" class="btn btn-success">Guardar actividad</button>
 </form>
@@ -19,7 +22,7 @@
 <template id="pregunta-template">
     <div class="pregunta mb-4 border rounded p-3">
         <label>Texto de la pregunta:</label>
-        <input type="text" name="preguntas[][texto]" class="form-control mb-2" required>
+        <input type="text" class="form-control mb-2 pregunta-texto" required>
 
         <div class="opciones-container">
             <!-- Opciones aquí -->
@@ -30,35 +33,64 @@
 
 <template id="opcion-template">
     <div class="opcion mb-2">
-        <input type="text" name="opciones[][texto]" class="form-control d-inline-block w-75" placeholder="Texto opción" required>
+        <input type="text" class="form-control d-inline-block w-75 opcion-texto" placeholder="Texto opción" required>
         <label class="ms-2">
-            <input type="checkbox" name="opciones[][es_correcta]"> Correcta
+            <input type="checkbox" class="opcion-correcta"> Correcta
         </label>
     </div>
 </template>
 
 <script>
+let preguntaIndex = 0;
+
 document.getElementById('agregar-pregunta').addEventListener('click', () => {
     const preguntaTemplate = document.getElementById('pregunta-template').content.cloneNode(true);
+    
+    const preguntaInput = preguntaTemplate.querySelector('.pregunta-texto');
     const opcionesContainer = preguntaTemplate.querySelector('.opciones-container');
     const agregarOpcionBtn = preguntaTemplate.querySelector('.agregar-opcion');
 
-    // Añadir 3 opciones por defecto
-    for (let i = 0; i < 3; i++) {
+    let opcionIndex = 0;
+
+    function agregarOpcion() {
+        if (opcionesContainer.children.length >= 3) {
+            alert('Máximo 3 opciones por pregunta');
+            return;
+        }
+
         const opcionTemplate = document.getElementById('opcion-template').content.cloneNode(true);
         opcionesContainer.appendChild(opcionTemplate);
+        opcionIndex++;
     }
 
-    agregarOpcionBtn.addEventListener('click', () => {
-        if (opcionesContainer.children.length < 3) {
-            const nuevaOpcion = document.getElementById('opcion-template').content.cloneNode(true);
-            opcionesContainer.appendChild(nuevaOpcion);
-        } else {
-            alert('Máximo 3 opciones por pregunta');
-        }
-    });
+    for (let i = 0; i < 3; i++) {
+        agregarOpcion();
+    }
+
+    agregarOpcionBtn.addEventListener('click', agregarOpcion);
 
     document.getElementById('preguntas-container').appendChild(preguntaTemplate);
+    preguntaIndex++;
+});
+
+document.querySelector('form').addEventListener('submit', function(e) {
+    const preguntas = [];
+    const preguntasDom = document.querySelectorAll('.pregunta');
+
+    preguntasDom.forEach(preguntaDiv => {
+        const texto = preguntaDiv.querySelector('.pregunta-texto').value;
+        const opciones = [];
+
+        preguntaDiv.querySelectorAll('.opcion').forEach(opcionDiv => {
+            const texto = opcionDiv.querySelector('.opcion-texto').value;
+            const es_correcta = opcionDiv.querySelector('.opcion-correcta').checked;
+            opciones.push({ texto, es_correcta });
+        });
+
+        preguntas.push({ texto, opciones });
+    });
+
+    document.getElementById('preguntas_json').value = JSON.stringify(preguntas);
 });
 </script>
 {% endblock %}

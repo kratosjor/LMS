@@ -1,0 +1,12 @@
+{% extends 'template_base.html' %}
+
+{% block content %}
+  <h2>Eliminar Actividad</h2>
+  <p>¿Estás seguro de que deseas eliminar la actividad "<strong>{{ object.titulo }}</strong>"?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">🗑 Confirmar eliminación</button>
+    <a href="{% url 'ver_actividad' object.curso.id %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}

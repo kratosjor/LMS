@@ -1,0 +1,29 @@
+{% extends 'template_base.html' %}
+{% block content %}
+<h2>{{ actividad.titulo }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    {% for pregunta in preguntas %}
+        <div class="mb-4">
+            <strong>{{ forloop.counter }}. {{ pregunta.texto }}</strong><br>
+
+            {% for opcion in pregunta.opciones.all %}
+                <label>
+                    <input type="radio" name="pregunta_{{ pregunta.id }}" value="{{ opcion.id }}">
+                    {{ opcion.texto }}
+                </label><br>
+            {% endfor %}
+        </div>
+    {% empty %}
+        <p>No hay preguntas para esta actividad.</p>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Enviar respuestas</button>
+    
+
+</form>
+<p>Total preguntas: {{ preguntas|length }}</p>
+
+{% endblock %}
